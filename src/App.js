@@ -1,19 +1,19 @@
-import './App.css';
-// import firebase from 'firebase/app';
-import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { getFirestore, collection, query, orderBy, limit,addDoc, serverTimestamp } from 'firebase/firestore';
-import { getAnalytics } from 'firebase/analytics';
-import { FieldValue } from 'firebase/firestore';
 
 
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/analytics';
+import './App.css';
 
 import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { initializeApp } from 'firebase/app';
+
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getFirestore, collection, query, orderBy, limit,addDoc, serverTimestamp } from 'firebase/firestore';
+import { getAnalytics } from 'firebase/analytics';
+import { FieldValue } from 'firebase/firestore';
 const firebaseConfig = {
   apiKey: "AIzaSyDbf52J3aToHHyONnTKAGqivsMpqdcudLo",
   authDomain: "terminal-talk.firebaseapp.com",
@@ -39,9 +39,10 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Hello</h1>
-        {/* <SignIn></SignIn> */}
       </header>
+      <div>
+        <Navbar></Navbar>
+      </div>
       <section>
         {user ? <Terminal />:<SignIn />}
       </section>
@@ -50,7 +51,7 @@ function App() {
 }
 
 function Terminal(){
-
+  const dummy = useRef()
   const messagesRef = collection(db, 'messages');
   const q = query(messagesRef, orderBy('createdAt'), limit(25));
   const [messages] = useCollectionData(q, { idField: 'id' });
@@ -69,6 +70,8 @@ function Terminal(){
     });
   
     setFormValue('');
+
+    dummy.current.scrollIntoView({behavior:'smooth'})
   };
   
 
@@ -77,6 +80,8 @@ function Terminal(){
       <div>
         {messages && messages.map((msg) => <ChatMessage key={msg.id} message={msg} />)}
       </div>
+
+      <div ref={dummy}></div>
 
       <form onSubmit={sendMessage}>
         <input value={formValue} onChange={(e)=> setFormValue(e.target.value)}></input>
@@ -96,7 +101,6 @@ function ChatMessage(props){
   if(photoURL===undefined){
     imgToShow=altImgURL;
   }
-  console.log("phot url: "+photoURL)
   return(
     <div className={`message ${messageClass}`}>
      <img src={imgToShow} ></img>
@@ -111,7 +115,7 @@ function SignIn(){
     signInWithPopup(auth, provider);
   };
   return(
-    <button onClick={signInWithGoogle}>Sign in with Google</button>
+    <button onClick={signInWithGoogle}>Sign in</button>
   )
 }
 
@@ -120,5 +124,13 @@ function SignOut(){
     <button onClick={() =>auth.signOut()}>Sign Out</button>
   )
 }
-
+function Navbar(){
+  return(
+    <div className='navbar'>
+      <SignIn></SignIn>
+      <SignOut></SignOut>
+    </div>
+    
+  )
+}
 export default App;

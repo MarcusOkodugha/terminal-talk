@@ -9,7 +9,7 @@ body {
 }
 
 .App header {
-  background-color: #181717;
+  /* background-color: #181717;
   height: 10vh;
   min-height: 50px;
   color: white;
@@ -22,7 +22,7 @@ body {
   justify-content: space-between;
   z-index: 99;
   padding: 10px;
-  box-sizing: border-box;
+  box-sizing: border-box; */
 }
 
 .App section {
@@ -83,7 +83,7 @@ input {
 }
 
 button {
-  background-color: #282c34; /* Green */
+  background-color: #282c34; 
   border: none;
   color: white;
   padding: 15px 32px;
@@ -152,4 +152,7 @@ img {
   border-radius: 50%;
   margin: 2px 5px;
 }
-
+.navbar{
+  /* background-color: red; */
+  
+}
