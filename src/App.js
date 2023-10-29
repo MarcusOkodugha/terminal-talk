@@ -126,7 +126,7 @@ function SignOut(){
 }
 function Navbar(){
   return(
-    <div className='navbar'>
+    <div className='nav'>
       <SignIn></SignIn>
       <SignOut></SignOut>
     </div>
