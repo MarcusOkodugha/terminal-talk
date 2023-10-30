@@ -38,6 +38,9 @@ function App() {
         <Navbar></Navbar>
       </div>
       <div>
+        <TabBar></TabBar>
+      </div>
+      <div>
         <SendWelcomeMesseges></SendWelcomeMesseges>
       </div>
       <section>
@@ -57,40 +60,55 @@ function Terminal(){
   const sendMessage = async (e) => {
     e.preventDefault();
     const { uid, photoURL } = auth.currentUser;
-  
+    const displayName = auth.currentUser.displayName;
+    
     await addDoc(collection(db, 'messages'), {
       text: formValue,
       createdAt: serverTimestamp(),
       uid,
       photoURL,
-    });
+      displayName,
+    }); 
   
     setFormValue('');
     dummy.current.scrollIntoView({behavior:'smooth'})
   };
   return (
     <>
-      <div>
-        {messages && messages.map((msg) => <ChatMessage key={msg.id} message={msg} />)}
+    <div>
+      <div className='terminal'>
+        <div>
+          {messages && messages.map((msg) => <ChatMessage key={msg.id} message={msg} />)}
+        </div>
       </div>
 
       <div ref={dummy}></div>
-
-      <form onSubmit={sendMessage}>
-        <input value={formValue} onChange={(e)=> setFormValue(e.target.value)}></input>
-        <button type="submit">Send</button>
+      <div>
+        <StatusBar></StatusBar>
+      </div>
+      <form onSubmit={sendMessage} className='input-form'>
+          <input placeholder='input:' value={formValue} onChange={(e)=> setFormValue(e.target.value)}></input>
+          <button type="submit">Send</button>
       </form>
+    </div>
     </>
   );
 }
 
 function ChatMessage(props){
-  const { text, uid, photoURL,createdAt } = props.message;
+  const { text, uid, photoURL,createdAt,displayName } = props.message;
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
   const altImgURL = "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
   let imgToShow=photoURL;
-  const date = createdAt.toDate().toDateString();
-  const time  = createdAt.toDate().toLocaleTimeString('sv-SE')
+
+  const options = {
+    weekday: 'short',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12:false,
+  };
+  const date = new Date(createdAt.toDate());
+  const formattedDate = new Intl.DateTimeFormat('sv-SE',options).format(date);
 
   if(photoURL===undefined){
     imgToShow=altImgURL;
@@ -98,14 +116,22 @@ function ChatMessage(props){
   return(
     <div>
       <div className={`message ${messageClass}`}>
-      <img src={imgToShow} alt='No img'></img>
-        <p>{text}</p>
-      </div>
-      <div className='date'>
-        <p>{date} {time}</p>
+      {/* <img src={imgToShow} alt='No img'></img> */}
+        <p>
+          <span className='time'>
+            {formattedDate}
+          </span>
+          \
+          <span>
+            {displayName}
+          </span>
+          \
+          <span>
+            {text}
+          </span>
+        </p>
       </div>
     </div>
-
   ) 
 }
 
@@ -128,7 +154,6 @@ function SignOut(){
 function SendWelcomeMesseges(){
   return(
     <div>
-     <button onClick={console.log("Yo")}>TEST</button>
     </div>
   )
 }
@@ -145,6 +170,33 @@ function Navbar(){
        {user ? <SignOut />:<SignIn />}
     </div>
     
+  )
+}
+
+function StatusBar(){
+  
+  return(
+    <div className='status-bar'>
+      <p>
+        !/bin/bash status [Willys]
+      </p>
+    </div>
+  )
+}
+
+function TabBar(){
+  return(
+    <div className='tab-bar'>
+      <Tab></Tab>
+    </div>
+  )
+}
+function Tab(){
+  return(
+    <div className='tab'>
+      <p>Terminal 1</p>
+      <button className='close-button'>x</button>
+    </div>
   )
 }
 export default App;
