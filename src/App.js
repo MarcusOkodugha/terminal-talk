@@ -5,15 +5,16 @@ import 'firebase/auth';
 import 'firebase/analytics';
 import './App.css';
 
-import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+// import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { useState, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
 
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { getFirestore, collection, query, orderBy, limit,addDoc, serverTimestamp } from 'firebase/firestore';
-import { getAnalytics } from 'firebase/analytics';
-import { FieldValue } from 'firebase/firestore';
+// import { getAnalytics } from 'firebase/analytics';
+// import { FieldValue } from 'firebase/firestore';
 const firebaseConfig = {
   apiKey: "AIzaSyDbf52J3aToHHyONnTKAGqivsMpqdcudLo",
   authDomain: "terminal-talk.firebaseapp.com",
@@ -27,14 +28,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 // const firestore = getFirestore(app);
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
 
 function App() {
   const [user] = useAuthState(auth)
-
-
 
   return (
     <div className="App">
@@ -44,7 +43,7 @@ function App() {
         <Navbar></Navbar>
       </div>
       <section>
-        {user ? <Terminal />:<SignIn />}
+        {user ? <Terminal />:<EmptyFunction />}
       </section>
     </div>
   );
@@ -124,11 +123,18 @@ function SignOut(){
     <button onClick={() =>auth.signOut()}>Sign Out</button>
   )
 }
-function Navbar(){
+
+function EmptyFunction(){
+  
+  return(
+    <div></div>
+    )
+  }
+  function Navbar(){
+  const [user] = useAuthState(auth)
   return(
     <div className='nav'>
-      <SignIn></SignIn>
-      <SignOut></SignOut>
+       {user ? <SignOut />:<SignIn />}
     </div>
     
   )
