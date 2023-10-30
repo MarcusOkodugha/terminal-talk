@@ -3,7 +3,7 @@ body {
 }
 
 .App {
-  text-align: center;
+  /* text-align: center; */
   max-width: 728px;
   margin: 0 auto;
 }
@@ -114,30 +114,33 @@ button:disabled {
 }
 
 
-
-
 ul, li {
   text-align: left;
   list-style: none;
 }
 
 p {
-  max-width: 500px;
   margin-bottom: 12px;
   line-height: 24px;
   padding: 10px 20px;
   border-radius: 25px;
   position: relative;
-  color: white;
-  text-align: center;
 }
+
+
 
 .message {
   display: flex;
   align-items: center;
 }
 
+.date{
+  color: black;
+  align-items:flex-end;
+  text-align: end;
 
+  /* background-color: red; */
+}
 .sent {
   flex-direction: row-reverse;
 }
